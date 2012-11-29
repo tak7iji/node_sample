@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<project name="run" default="main" basedir=".">
+
+  <target name="main">
+    <java classname="jp.co.ntts.test.sample.WSTest" fork="true">
+      <classpath>
+        <fileset dir="target/">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+      <arg value="10"/>
+    </java>
+  </target>
+</project>
