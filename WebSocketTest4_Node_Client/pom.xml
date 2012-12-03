@@ -2,22 +2,22 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>jp.co.ntts.sample</groupId>
-    <artifactId>WebSocketTest3_Node_Client</artifactId>
+    <artifactId>WebSocketTest4_Node_Client</artifactId>
     <version>1.0.0</version>
     <dependencies>
-        <dependency>
-            <groupId>java.websocket</groupId>
-            <artifactId>websocket</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/WebSocket.jar</systemPath>
-        </dependency>
         <dependency>
             <groupId>java.websocket</groupId>
             <artifactId>java.socket.io</artifactId>
             <version>1.0</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/java-socket.io.client-1.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>WebSocket</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/WebSocket.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>

@@ -10,9 +10,9 @@
 				</fileset>
 			</classpath>
 			<arg value="-max" />
-			<arg value="1" />
+			<arg value="10000" />
 			<arg value="-host" />
-			<arg value="localhost" />
+			<arg value="10.17.198.69" />
 		</java>
 	</target>
 </project>

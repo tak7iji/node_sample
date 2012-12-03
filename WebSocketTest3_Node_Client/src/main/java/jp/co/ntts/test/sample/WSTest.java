@@ -6,13 +6,22 @@ import org.json.JSONObject;
 
 public class WSTest {
     public static void main(String[] args) throws Exception {
-        new WSTest().startTest(args.length == 0 ? 1 : Integer.valueOf(args[0]));
+        for(int i = 0; i < args.length; i++){
+            if(args[i].startsWith("-") && args.length >= (i+1)) {
+                try {
+                    Options.valueOf(args[i].substring(1)).setValue(args[++i]);
+                } catch (IllegalArgumentException iae) {
+                    //ignore
+                }
+            }
+        }
+        new WSTest().startTest(Integer.parseInt(Options.max.getValue()), Options.host.getValue());
     }
 
-    public void startTest(int max) throws Exception {
+    public void startTest(int max, String host) throws Exception {
 
         for (int i = 0; i < max; i++) {
-            open(i);
+            open(i, host);
             Thread.sleep(10);
         }
         synchronized (this) {
@@ -20,30 +29,26 @@ public class WSTest {
         }
     }
 
-    public void open(final int id) {
+    public void open(final int id, String host) {
         try {
-            IOSocket socket = new IOSocket("http://localhost:3000/",
+            IOSocket socket = new IOSocket("http://"+host+":3000",
                     new MessageCallback() {
                         public void on(String event, JSONObject... data) {
                             System.out.println(id + " >>> " + event + ":" + data[0]);
                         }
 
-                        @Override
                         public void onMessage(String message) {
                             System.out.println(id + " >>> " + message);
                         }
 
-                        @Override
                         public void onMessage(JSONObject message) {
                             System.out.println(id + " >>> " + message + " [JSON])");
                         }
 
-                        @Override
                         public void onConnect() {
                             System.out.println(id + " >>> Connection opened.");
                         }
 
-                        @Override
                         public void onDisconnect() {
                             System.out.println(id + " >>> Connection closed.");
                         }
@@ -52,6 +57,24 @@ public class WSTest {
             socket.connect();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    enum Options {
+        host("localhost"),
+        max("1");
+        
+        private String value;
+
+        Options(String defaultValue) {
+            this.value = defaultValue;
+        }
+        
+        String getValue() {
+            return this.value;
+        }
+        
+        void setValue(String value) {
+            this.value = value;
         }
     }
 }
