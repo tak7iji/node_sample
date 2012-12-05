@@ -3,12 +3,11 @@ package jp.co.ntts.test.sample;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import com.clwillingham.socket.io.IOSocket;
-import com.clwillingham.socket.io.MessageCallback;
-import org.json.JSONObject;
+import java.util.concurrent.CountDownLatch;
 
 public class WSTest {
+    private CountDownLatch latch;
+    
     public static void main(String[] args) throws Exception {
         for (int i = 0; i < args.length; i++) {
             if (args[i].startsWith("-") && args.length >= (i + 1)) {
@@ -24,20 +23,21 @@ public class WSTest {
     }
 
     public void startTest(int max, String host) throws Exception {
-
+        latch = new CountDownLatch(max);
         long start = System.currentTimeMillis();
+        Date delay = new Date(start + 5000 + (max * 50));
 
         for (int i = 0; i < max; i++) {
-            new Timer().schedule(new SendTask(open(i, host)), new Date(start
-                    + 5000 + (max * 50)));
+            new Timer().schedule(new SendTask(open(i, host)), delay);
             Thread.sleep(10);
         }
         System.out.println("Elapsed time: "
                 + (System.currentTimeMillis() - start));
 
-        synchronized (this) {
-            wait();
-        }
+        latch.await();
+
+        Thread.sleep(5000);
+        open(max, host).getIOSocket().send("get");
     }
 
     public IOSocketClient open(final int id, String host) {
@@ -61,53 +61,13 @@ public class WSTest {
         @Override
         public void run() {
             try {
-                client.getIOSocket().send(client.getId() + "," + System.currentTimeMillis());
+                client.getIOSocket().send(
+                        client.getId() + "," + System.currentTimeMillis());
+                latch.countDown();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    class IOSocketClient {
-
-        private int id;
-        private IOSocket socket;
-
-        int getId() {
-            return this.id;
-        }
-        
-        IOSocket getIOSocket() {
-            return this.socket;
-        }
-        
-        void connect(final int id, String host) throws Exception {
-            socket = new IOSocket("http://" + host + ":3000", new MessageCallback() {
-                public void on(String event, JSONObject... data) {
-                    System.out.println(id + " >>> " + event + ":" + data[0]);
-                }
-
-                public void onMessage(String message) {
-                    System.out.println(id + " >>> " + message);
-                }
-
-                public void onMessage(JSONObject message) {
-                    System.out.println(id + " >>> " + message + " [JSON])");
-                }
-
-                public void onConnect() {
-                    System.out.println(id + " >>> Connection opened.");
-                }
-
-                public void onDisconnect() {
-                    System.out.println(id + " >>> Connection closed.");
-                }
-            });
-            socket.connect();
-
-            this.id = id;
-        }
-
     }
 
     enum Options {
