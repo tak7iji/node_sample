@@ -1,12 +1,9 @@
 package jp.co.ntts.test.sample;
 
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
 
 public class WSTest {
-    private CountDownLatch latch;
+    private CyclicBarrier barrier;
     
     public static void main(String[] args) throws Exception {
         for (int i = 0; i < args.length; i++) {
@@ -23,21 +20,24 @@ public class WSTest {
     }
 
     public void startTest(int max, String host) throws Exception {
-        latch = new CountDownLatch(max);
+        barrier = new CyclicBarrier(max+1);
         long start = System.currentTimeMillis();
-        Date delay = new Date(start + 5000 + (max * 50));
 
         for (int i = 0; i < max; i++) {
-            new Timer().schedule(new SendTask(open(i, host)), delay);
+            new Thread(new SendTask(open(i, host))).start();
             Thread.sleep(10);
         }
         System.out.println("Elapsed time: "
                 + (System.currentTimeMillis() - start));
 
-        latch.await();
+        Thread.sleep(5000);
+
+        barrier.await();
+        barrier.reset();
+        barrier.await();
 
         Thread.sleep(5000);
-        open(max, host).getIOSocket().send("get");
+        open(max, host).pushLog();
     }
 
     public IOSocketClient open(final int id, String host) {
@@ -51,22 +51,25 @@ public class WSTest {
         return client;
     }
 
-    class SendTask extends TimerTask {
+    class SendTask implements Runnable {
         private IOSocketClient client;
 
         public SendTask(IOSocketClient client) {
             this.client = client;
         }
 
-        @Override
         public void run() {
             try {
+                barrier.await();
                 client.getIOSocket().send(
                         client.getId() + "," + System.currentTimeMillis());
-                latch.countDown();
+                Thread.sleep(1000);
+                barrier.await();
+                client.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            System.out.println(client.getId()+" stopped.");
         }
     }
 

@@ -45,4 +45,17 @@ public class IOSocketClient {
         this.id = id;
     }
 
+    public void close() {
+        socket.disconnect();
+        
+    }
+
+    public void pushLog() {
+        try {
+            socket.emit("get", new JSONObject("{}"));
+        } catch (Exception e) {
+        }
+        socket.disconnect();
+    }
+
 }
