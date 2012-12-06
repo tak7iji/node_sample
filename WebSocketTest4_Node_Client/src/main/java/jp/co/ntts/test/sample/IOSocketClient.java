@@ -21,23 +21,18 @@ public class IOSocketClient {
     public void connect(final int id, String host) throws Exception {
         socket = new IOSocket("http://" + host + ":3000", new MessageCallback() {
             public void on(String event, JSONObject... data) {
-                System.out.println(id + " >>> " + event + ":" + data[0]);
             }
 
             public void onMessage(String message) {
-                System.out.println(id + " >>> " + message);
             }
 
             public void onMessage(JSONObject message) {
-                System.out.println(id + " >>> " + message + " [JSON])");
             }
 
             public void onConnect() {
-                System.out.println(id + " >>> Connection opened.");
             }
 
             public void onDisconnect() {
-                System.out.println(id + " >>> Connection closed.");
             }
         });
         socket.connect();

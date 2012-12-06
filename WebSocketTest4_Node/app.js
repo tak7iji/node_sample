@@ -7,6 +7,7 @@ var express = require('express')
   , io = require('socket.io')
   , routes = require('./routes')
   , http = require('http')
+  , fs = require('fs')
   , path = require('path');
 
 var app = express();
@@ -32,12 +33,22 @@ var server = http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
+var logList = new Array();
 var socket = io.listen(server, {'log level' : 0, 'heartbeat interval' : 600, 'transports' : ['websocket']});
 socket.on('connection', function(socket) {
-  console.log("connected");
   socket.on('message', function(msg) {
     var date = +new Date();
-    console.log(msg+", "+date);
+    var log = msg+', '+date+'\n';
+    logList.push(log);
+  });
+  socket.on('get', function(msg) {
+    fs.open('./log.csv', 'w', 777, function(err, fd) {
+      for(i=0; i < logList.length; i++){
+        var buf = new Buffer(logList[i]);
+        fs.writeSync(fd, buf, 0, buf.length, null);
+      }
+      fs.close(fd);
+    });
   });
 });
-    
+ 
