@@ -1,24 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>jp.co.ntts.sample</groupId>
-    <artifactId>WebSocketTest3_Node_Client</artifactId>
-    <version>1.0.0</version>
-    <dependencies>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.sample.client</groupId>
+	<artifactId>Echo_Node_Client</artifactId>
+	<version>1.0.0</version>
+	<dependencies>
         <dependency>
-            <groupId>java.websocket</groupId>
-            <artifactId>websocket</artifactId>
+            <groupId>com.clwillingham</groupId>
+            <artifactId>socket.io</artifactId>
             <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/WebSocket.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>java.websocket</groupId>
-            <artifactId>java.socket.io</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/java-socket.io.client-1.0.jar</systemPath>
-        </dependency>
+  	    <dependency>
+  	        <groupId>org.java_websocket</groupId>
+  		    <artifactId>WebSocket</artifactId>
+  		    <version>1.0.0-SNAPSHOT</version>
+  	    </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>

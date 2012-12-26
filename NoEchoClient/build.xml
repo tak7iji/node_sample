@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<project name="run" default="main" basedir=".">
+
+	<target name="main">
+		<java classname="org.sample.client.WSTest" fork="true">
+			<classpath>
+				<fileset dir="target/">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<arg value="-max" />
+			<arg value="10000" />
+			<arg value="-host" />
+			<arg value="localhost" />
+			<jvmarg value="-Xloggc:./gc.log" />
+			<jvmarg value="-XX:+PrintGCDetails" />
+			<jvmarg value="-XX:+PrintGCDateStamps" />
+			<jvmarg value="-Xmx1200m" />
+			<jvmarg value="-Xms1200m" />
+			<jvmarg value="-Xss128k" />
+			<jvmarg value="-XX:NewSize=400m" />
+			<jvmarg value="-XX:MaxNewSize=400m" />
+			<jvmarg value="-XX:+UseConcMarkSweepGC" />
+			<jvmarg value="-XX:+UseCMSInitiatingOccupancyOnly" />
+			<jvmarg value="-XX:+CMSClassUnloadingEnabled" />
+			<jvmarg value="-XX:CMSInitiatingOccupancyFraction=80" />
+		</java>
+	</target>
+</project>
