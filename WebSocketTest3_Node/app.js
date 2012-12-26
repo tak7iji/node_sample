@@ -35,8 +35,9 @@ var server = http.createServer(app).listen(app.get('port'), function(){
 var socket = io.listen(server, {'log level' : 0, 'heartbeat interval' : 300, 'transports' : ['websocket']});
 socket.on('connection', function(socket) {
   socket.on('message', function(msg) {
-    socket.send(msg);
-    socket.broadcast.send(msg);
+    var start = +new Date();
+    socket.send(msg+', '+start);
+    socket.broadcast.send(msg+', '+start);
   });
 });
     

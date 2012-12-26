@@ -10,9 +10,21 @@
 				</fileset>
 			</classpath>
 			<arg value="-max" />
-			<arg value="1" />
+			<arg value="10" />
 			<arg value="-host" />
-			<arg value="localhost" />
+			<arg value="10.17.198.69" />
+                        <jvmarg value="-Xloggc:./gc.log" />
+                        <jvmarg value="-XX:+PrintGCDetails" />
+                        <jvmarg value="-XX:+PrintGCDateStamps" />
+                        <jvmarg value="-Xmx1200m"/>
+                        <jvmarg value="-Xms1200m"/>
+                        <jvmarg value="-Xss128k"/>
+                        <jvmarg value="-XX:NewSize=400m"/>
+                        <jvmarg value="-XX:MaxNewSize=400m"/>
+                        <jvmarg value="-XX:+UseConcMarkSweepGC"/>
+                        <jvmarg value="-XX:+UseCMSInitiatingOccupancyOnly"/>
+                        <jvmarg value="-XX:+CMSClassUnloadingEnabled"/>
+                        <jvmarg value="-XX:CMSInitiatingOccupancyFraction=80"/>
 		</java>
 	</target>
 </project>
