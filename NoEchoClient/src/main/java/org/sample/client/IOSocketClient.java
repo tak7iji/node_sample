@@ -1,4 +1,4 @@
-package jp.co.ntts.test.sample;
+package org.sample.client;
 
 import org.json.JSONObject;
 

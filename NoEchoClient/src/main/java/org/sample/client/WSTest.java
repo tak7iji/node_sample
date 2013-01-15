@@ -1,5 +1,6 @@
-package jp.co.ntts.test.sample;
+package org.sample.client;
 
+import java.io.PrintStream;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
@@ -8,6 +9,15 @@ public class WSTest {
     private CountDownLatch latch;
     
     public static void main(String[] args) throws Exception {
+        System.setOut(new PrintStream(new java.io.OutputStream() {
+            public void write(int b) {
+            }
+        }));
+        System.setErr(new PrintStream(new java.io.OutputStream() {
+            public void write(int b) {
+            }
+        }));
+
         for (int i = 0; i < args.length; i++) {
             if (args[i].startsWith("-") && args.length >= (i + 1)) {
                 try {
